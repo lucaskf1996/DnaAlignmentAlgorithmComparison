@@ -2,6 +2,7 @@
 #include <random>
 #include<algorithm>
 #include<fstream>  
+#include<bits/stdc++.h>
 
 // CHECK IF PAIR IS EQUAL
 int checkPair(char c1, char c2, int wmat, int wmis, int score){
@@ -28,31 +29,40 @@ int main(){
     std::cin >> b;
 
     std::random_device rd;
-    // int seed = 5;
-    // std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution2(1,m);
     std::uniform_int_distribution<int> distribution1(1,n);
+    std::uniform_int_distribution<int> distribution3(20,std::sqrt(2*n*m));
     std::string subA, subB;
     int max_score;
 
-    if(n>m){
-        k = distribution2(rd);  
+    if(n>m){ 
         max_score = -n*2;
     }
     else{
-        k = distribution1(rd);
         max_score = -m*2;
     }
 
-    std::uniform_int_distribution<int> distribution21(0,m-k);
-    for(int rounds = 0; rounds<100000; rounds++){
-        p = distribution2(rd);
-        // int scoreList[p];
+    int rounds = 10000;
+
+    std::time_t start, end;
+  
+    time(&start);
+    
+    for(int round = 0; round<rounds; round++){
+        if(n>m){
+            k = distribution2(rd);
+        }
+        else{
+            k = distribution1(rd);
+        }
+        std::uniform_int_distribution<int> distribution21(0,m-k);
         subA = a.substr(0,k);
+        p = distribution3(rd);
         for(int i = 0; i < p; i++){
             score = 0;
             j = distribution21(rd);
             subB = b.substr(j,k);
+            // std::cout << subA.length() << "  " << subB.length() << "  " << k << "  " << j << std::endl;
             for(int index = 0; index < k; index++){
                 score += checkPair(subA[index], subB[index], wmat, wmis, score);
             }
@@ -62,15 +72,12 @@ int main(){
                 bestA = subA;
                 bestB = subB;
             }
-            // std::cout << subA << std::endl << subB << std::endl;
-            // std::cout << score << std::endl;
         }
     }
-    // std::cout << std::endl << "n: " << n << std::endl << "m: " << m << std::endl << "k: " << k << std::endl << "p: " << p << std::endl;
-    // std::cout << "max_score: " << max_score << std::endl;
-    // std::cout << "bestA: " << bestA << std::endl;
-    // std::cout << "bestB: " << bestB << std::endl;
+    time(&end);
     std::ofstream outfile ("output.txt");
+    double time_taken = double(end - start);
+    outfile << "Time taken by program is : " << time_taken << std::setprecision(5) << std::endl;
     outfile << max_score << std::endl << "bestA: " << bestA << std::endl << "bestB: " << bestB << std::endl;
     outfile.close();
 }
