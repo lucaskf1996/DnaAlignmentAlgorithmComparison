@@ -1,4 +1,0 @@
-Time taken by program is : 12
-13
-bestA: T--GCAA-AAGGTTCAAG-A
-bestB: CA-GTTA-ATCCCTGAAG-A
